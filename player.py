@@ -22,7 +22,7 @@ ATTRIBUTES_POINTS = 5
 ATTRIBUTES = ([
     "Força",
     "Reflexos",
-    "Precição",
+    "Precisão",
     "Presença",
     "Agilidade",
     "Inteligência",
