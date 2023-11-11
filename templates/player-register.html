@@ -1,7 +1,9 @@
 <main id="prp">
   <h1>Ficha de registro</h1>
-  <p>Para criar seu personagem tenha em mente que o universe se
+  <p class="info">Para criar seu personagem tenha em mente que o universe se
   passa nos dias atuais, e não há elementos místicos.</p>
+  <p class="info">O RPG está em fase de desenvolvimento, sendo que cada opções
+  mostradas aqui estão propensas a mudanças.</p>
   <br>
   <form
     hx-post="/player-register"
@@ -30,17 +32,17 @@
       <label>Ocupação</label>
       <p class="info">Pode ser qualquer ocupação sugerida ou uma que
       lhe venha em mente, a ocupação dará vantagens ao jogadores
-      seja dando-os attributos ou alguma</p>
+      seja dando-os atributos ou vantagem em alguma mecânica.</p>
       <input list="profissions" name="job" autocomplete="off" value="{{job}}">
       <datalist id="profissions">
 	<option value="Hacker">
 	<option value="Ladrão">
-	<option value="Médico">
+	<option value="Médico(a)">
 	<option value="Militar">
-	<option value="Lutador">
-	<option value="Político">
+	<option value="Lutador(a)">
+	<option value="Político(a)">
 	<option value="Polícial">
-	<option value="Investigador">
+	<option value="Investigador(a)">
       </datalist>
     </div>
     <div>
@@ -52,8 +54,19 @@
       <textarea name="history" rows="10">{{history}}</textarea>
     </div>
     <br>
+    <h3>IMPORTANTE</h3>
+    <p class="info">Tenha em mente que para obter sucesso em um teste é necessário obter 10 ou mais nos
+    dados.</p>
+    <br>
     <div>
       <h3>Atributos (<span id="attributes-points">{{attributes_points_n}}</span> pontos)</h3>
+      <p class="info">Atributos definem quantos dados serão rolados em um determinado teste.</p>
+      <p class="info">por exemplo:
+      para mover um objeto pesado é necessário força, caso seu personagem tenha 0 em força
+      será necessário jogar dois dados e pegar o menor valor, caso o seu personagem tenha 1
+      em força terá que rolar apenas 1 dado, caso tenha 2 em força poderá rolar dois dados e
+      pegar o maior valor.</p>
+      <p class="info">Sugestões para novos atributos são bem-vindos.</p>
       {% for attr in attributes %}
       <label id="{{attr}}-value">{{attr}}: <span>{{attributes[attr]}}</span></label>
       <input id="{{attr}}-input" type="range" name="{{attr}}" min="0" max="2" value="{{attributes[attr]}}">
@@ -62,6 +75,15 @@
     <br>
     <div>
       <h3>Conhecimentos (<span id="knowledges-points">{{knowledges_points_n}}</span> pontos)</h3>
+      <p class="info">Conhecimentos ditam o quanto o seu personagem tem habilidade em determinada
+      área de atuação, mecânicamente ele funciona adicionando o valor ao resultado final obtido no dado.</p>
+      <p class="info">Por exemplo: Supondo que um jogador queira atacar terá de rolar um teste de [força + combate],
+      digamos que este personagem tenha 2 em força e 3 em combate ele jogará 2 dados de 20 lados
+      pegará o maior valor e adicionará mais 3 para obter o resultado final.</p>
+      <p class="info">Todo jogador começa com -8 em cada conhecimento, caso sua profissão/ocupação
+      tenha relação com algum conhecimento você perderá essa desvantagem, ficando com +0 em determinado
+      conhecimento.</p>
+      <p class="info">Sugestões para novos conhecimentos são bem-vindos.</p>
       {% for knowledge in knowledges %}
       <label id="{{knowledge}}-value">{{knowledge}}: <span>{{knowledges[knowledge]}}</span></label>
       <input id="{{knowledge}}-input" type="range" name="{{knowledge}}" min="0" max="3" value="{{knowledges[knowledge]}}">
@@ -69,7 +91,7 @@
     </div>
     <br>
     <p>Mensagem: <span id="message"></span></p>
-    <input type="submit" value="Criar">
+    <input type="submit" value="Salvar">
   </form>
 </main>
 <script>
