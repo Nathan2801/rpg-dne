@@ -18,6 +18,7 @@ player.register("astral")
 player.register("violao")
 player.register("jogador")
 player.register("teclado")
+player.register("mestre")
 
 app = Flask(__name__)
 
