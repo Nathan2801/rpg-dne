@@ -13,8 +13,11 @@ from flask import (
 
 import player
 
-try: player.register("astral")
-except: pass
+player.register("cruel")
+player.register("astral")
+player.register("violao")
+player.register("jogador")
+player.register("teclado")
 
 app = Flask(__name__)
 
