@@ -1,0 +1,58 @@
+<div id="dice-roll-wrapper">
+  <div id="dice-value" class="dice w100p f jcc aic"> 0 </div>
+  <div id="dices" class="dice-list list w100p">
+    <div onclick="niceRoll(4, 8)">d4</div>
+    <div onclick="niceRoll(6, 8)">d6</div>
+    <div onclick="niceRoll(10, 8)">d10</div>
+    <div onclick="niceRoll(12, 8)">d12</div>
+    <div onclick="niceRoll(20, 8)">d20</div>
+    <div onclick="niceRoll(100, 8)">d100</div>
+  </div>
+</div>
+<style>
+#dice-roll-wrapper {
+  display : flex;
+  width   : 100%;
+  height  : 100%;
+}
+
+#dice-value {
+  font-size : 30pt;
+}
+
+#dices {
+  display : grid;
+  grid-template-columns : 1fr 1fr 1fr;
+}
+
+#dices > div {
+  display         : flex;
+  align-items     : center;
+  justify-content : center;
+
+  border : 1px solid #00000011;
+}
+
+#dices > div:hover {
+  cursor     : pointer;
+  background : #00000011;
+}
+</style>
+
+<script>
+  let diceNumber = document.querySelector(".dice");
+  let diceList = document.querySelector(".dice-list");
+
+  function roll(sides) {
+    let value = Math.random() * sides + 1;
+    value = Math.floor(value);
+    diceNumber.innerHTML = `${value}`;
+  }
+
+  async function niceRoll(sides, n) {
+    for (let _ in [...Array(n).keys()]) {
+      roll(sides);
+      await new Promise(r => setTimeout(r, 75));
+    }
+  }
+</script>

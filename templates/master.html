@@ -1,0 +1,108 @@
+<link rel="stylesheet" href="static/styles.css">
+<div class="f ai-center jc-center">
+  <div id="master-page" class="f">
+    <section class="f fc">
+      <div class="component">
+	<div id="char-list" class="list" hx-get="/players" hx-trigger="load">
+	</div>
+      </div>
+      <div class="component h100p">
+	<div id="char-docv" class="component doc-viewer scroll">
+	  <p id="player-name">[name]</p>
+	  <div id="player-attributes">[attributes]</div>
+	  <p id="player-description">[description]</p>
+	</div>
+      </div>
+    </section>
+    <section class="component f fc">
+      <div
+	hx-trigger="load"
+	hx-get="/component/doc-viewer"
+	hx-swap="outerHTML"></div>
+    </section>
+    <section class="f fc">
+      <div class="component">
+	<div class="dices f" hx-get="/component/dice-roll" hx-trigger="load">[dices]</div>
+      </div>
+      <div class="component mixer">
+	<div hx-get="/component/mixer" hx-trigger="load" hx-swap="outerHTML"></div>
+      </div>
+      <div id="event-list" class="component">
+	<div
+	    id="event-list"
+	    class="scroll h100p w100p"
+	    hx-get="/messages/m"
+	    hx-swap="afterbegin"
+	    hx-trigger="every 2s">
+	</div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<style>
+#master-page {
+  width  : 100%;
+  height : 100vh;
+
+  color      : white;
+  background : var(--bg);
+}
+
+#master-page a {
+  color : #ccc;
+}
+
+.component {
+  padding : 5px;
+}
+
+.component > div:nth-child(1) {
+  width      : 100%;
+  height     : 100%;
+
+  border     : 1px solid #fb568a;
+  box-shadow : 0 0 5px #fb568a;
+}
+
+#master-page > section:nth-child(1) {
+  width: 30%;
+}
+
+#master-page > section:nth-child(2) {
+  width: 40%;
+}
+
+#master-page > section:nth-child(3) {
+  width: 30%;
+}
+
+#master-page > section:nth-child(1) > div:nth-child(1) {
+  flex: 1;
+}
+
+#master-page > section:nth-child(1) > div:nth-child(2) {
+  flex: 3;
+}
+
+#master-page > section:nth-child(3) > * {
+  height: calc(100vh / 3);
+}
+
+::-webkit-scrollbar {
+  width       : 10px;
+  border-left : 1px solid #00000022;
+}
+
+::-webkit-scrollbar-track {
+  background : #00000011;
+}
+
+::-webkit-scrollbar-thumb {
+  background : #00000011;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background : #00000022;
+}
+</style>

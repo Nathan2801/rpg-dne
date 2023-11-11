@@ -1,0 +1,50 @@
+<div id="{{uid}}" class="mixer-entry">
+  <section>
+    <button id="{{uid}}-play" class="mixer-btn btn-play">P</button>
+    <button id="{{uid}}-rept" class="mixer-btn">R</button>
+  </section>
+  <section>
+    <p>{{ file_name }}</p>
+    <input id="{{uid}}-slider" class="mixer-slider" type="range" min="0" max="100", value="0">
+  </section>
+  <audio id="{{uid}}-audio">
+    <source src="{{full_path}}" type="audio/mpeg">
+  </audio>
+</div>
+<script>
+  (function() {
+    const entry = document.querySelector("#{{uid}}");
+    const audio = document.querySelector("#{{uid}}-audio");
+    const playB = document.querySelector("#{{uid}}-play");
+    const reptB = document.querySelector("#{{uid}}-rept");
+    const slider = document.querySelector("#{{uid}}-slider");
+
+    playB.addEventListener("click", (e) => {
+      audio.paused ? audio.play() : audio.pause();
+    });
+
+    reptB.addEventListener("click", (e) => {
+      audio.loop = !audio.loop;
+      reptB.classList.toggle("mixer-btn-highlight");
+    });
+
+    audio.addEventListener("timeupdate", (e) => {
+      slider.value = audio.currentTime / audio.duration * 100;
+    });
+
+    audio.addEventListener("play", (e) => {
+      playB.classList.add("mixer-btn-highlight");
+    });
+
+    audio.addEventListener("pause", (e) => {
+      playB.classList.remove("mixer-btn-highlight");
+    });
+
+    slider.addEventListener("change", (e) => {
+      let value = e.target.value;
+      let mtime = audio.duration / 100 * value; 
+
+      audio.currentTime = mtime;
+    });
+  })();
+</script>

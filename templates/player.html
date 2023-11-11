@@ -1,0 +1,193 @@
+<script>
+  const fullscreen = () => {
+    document.body.webkitRequestFullScreen();
+  };
+</script>
+
+<div id="wrapper" class="neoned-text flexed neoned-border fill-width fill-height font-bigger font-technology">
+  <div id="perfil" class="no-break-line padded">
+    <h1>{{nome or "Desconhecido"}}</h1>
+    <h4>{{carreira or "Desconhecida"}}</h4>
+    <br>
+    {% if atributos|length > 0 %}
+    {% for atributo in atributos %}
+    <p>{{atributo}}: {{atributos[atributo]}}</p>
+    {% endfor%}
+    {% else %}
+    <p>Atributos corrompidos</p>
+    {% endif %}
+  </div>
+
+  <div id="right-side" class="flex-overflow-fix flexed vertically fill-height flexed-1">
+    <div id="description" class="flex-overflow-fix scrollable half-marged neoned-border padded fill-height">
+      <p>{{descricao or "Dados corrompidos"}}</p>
+    </div>
+
+    <div id="panel" class="flexed half-padded half-marged neoned-border border-white">
+      <form hx-post="/messages/user-a" hx-swap="none">
+	<input type="hidden" name="message" value="player [x] requested +1 life">
+	<input type="submit" class="neoned-text neoned-border transparent half-padded font-bigger font-technology fill-height half-right-marged" value="+1 vida">
+      </form>
+      <form hx-post="/messages/user-a" hx-swap="none">
+	<input type="hidden" name="message" value="player [x] requested -1 life">
+	<input type="submit" class="neoned-text neoned-border transparent half-padded font-bigger font-technology fill-height half-right-marged" value="-1 vida">
+      </form>
+      <button class="neoned-text neoned-border transparent half-padded font-bigger font-technology fill-height half-right-marged" onclick="fullscreen()">
+	Tela cheia
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+
+body {
+  width: 100vw;
+  height: 100vh;
+
+  color: white;
+  padding: 1rem;
+
+  display: flex;
+  align-items: start;
+
+  flex-direction: column;
+
+  background: #181818;
+}
+
+body::backdrop {
+  background: #181818;
+}
+
+.flex-overflow-fix {
+  min-width: 0;
+  min-height: 0;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+.font-bigger {
+  font-size: 16pt;
+}
+
+.font-technology {
+  font-family: 'Technology', sans-serif;
+}
+
+.flexed {
+  display: flex;
+}
+
+.flexed-1 {
+  flex: 1;
+}
+
+.neoned-border {
+  border: 2px solid white;
+  box-shadow:
+    0 0 6.0px {{cor}}, inset 0 0 6.0px {{cor}};
+}
+
+.neoned-text {
+  color: white;
+  text-shadow:
+    0 0 4.0px {{cor}};
+}
+
+.top-marged {
+  margin: 1rem 0 0 0;
+}
+
+.left-marged {
+  margin: 0 0 0 1rem;
+}
+
+.right-marged {
+  margin: 0 1rem 0 0;
+}
+
+.half-right-marged {
+  margin: 0 0.5rem 0 0;
+}
+
+.half-marged {
+  margin: 0.5rem;
+}
+
+.bordered {
+  border-width: 2px;
+  border-style: solid;
+}
+
+.border-white {
+  border-color: white;
+}
+
+.rounded {
+  border-radius: 1rem;
+}
+
+.padded {
+  padding: 1rem;
+}
+
+.half-padded {
+  padding: 0.5rem;
+}
+
+.fill-width {
+  width: 100%;
+}
+
+.fill-height {
+  height: 100%;
+}
+
+.transparent {
+  background: #00000000;
+}
+
+.vertically {
+  flex-direction: column;
+}
+
+.scrollable {
+  overflow-y: scroll;
+}
+
+.side-scrollable {
+  overflow-x: scroll;
+}
+
+.no-break-line {
+  white-space: nowrap;
+}
+
+</style>
+
+<script>
+  (function() {
+    const query = (q) => document.querySelector(q);
+
+    function configurePage(e) {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const horizontal = width > height;
+
+      let wrapperDirection = "column";
+
+      if (horizontal) {
+	wrapperDirection = "row";
+      }
+
+      const wrapper = query("#wrapper");
+      wrapper.style.flexDirection = wrapperDirection;
+    }
+
+    window.addEventListener("resize", configurePage);
+    configurePage();
+  })();
+</script>

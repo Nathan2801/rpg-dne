@@ -1,0 +1,80 @@
+<div id="mixer-container">
+  <section id="mixer-entries">
+    <form
+	hx-trigger="load"
+	hx-post="/component/list/mixer-entry"
+	hx-swap="outerHTML">
+      <input
+	  type="hidden"
+	  name="path"
+	  value="static/audios">
+    </form>
+  </section>
+</div>
+
+<style>
+#mixer-container {
+  height     : 100%;
+  overflow-y : scroll;
+}
+
+#mixer-entries {
+  width : 100%;
+}
+
+.mixer-entry {
+  width  : 100%;
+  height : 4rem;
+
+  display     : flex;
+  align-items : fill;
+
+  background    : #00000011;
+  border-bottom : 1px solid #00000022;
+}
+
+.mixer-entry > section:nth-child(1) {
+  flex    : 0;
+  display : flex;
+
+  flex-direction : column;
+}
+
+.mixer-entry > section:nth-child(2) {
+  flex : 1;
+
+  padding : 0.5rem;
+  display : flex;
+
+  flex-direction  : column;
+  justify-content : space-between;
+}
+
+.mixer-btn {
+  width  : 20px; 
+  height : 100%;
+  border : none;
+  color  : white;
+
+  background : #00000011;
+}
+
+.mixer-btn-highlight {
+  color : #fb568a;
+}
+
+.mixer-btn:hover {
+  cursor     : pointer;
+  background : #00000022;
+}
+
+.mixer-slider {
+  appearance : none;
+  background : #00000022;
+}
+
+.mixer-slider::-webkit-slider-thumb {
+  appearance : none;
+  background : #00000022;
+}
+</style>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet"
+	  href="static/styles.css">
+    <link rel="stylesheet"
+	  href="https://fonts.cdnfonts.com/css/technology">
+    <link rel="shortcut icon"
+	  href="{{ url_for('static', filename='favicon.ico') }}">
+    <!--
+    <link rel="stylesheet"
+	  href="https://fonts.cdnfonts.com/css/old-english-five">
+    -->
+                    
+
+    <meta name="viewport"
+	  content="width=device-width, initial-scale=1.0">
+    <meta content="text/html; charset=UTF-8"
+	  http-equiv="content-type">
+                
+    <script src="https://unpkg.com/htmx.org@1.9.6">
+    </script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/multi-swap.js">
+    </script>
+  </head>
+  <body>
+    <div id="page" class="f fc aic jcc h100vh bg-default">
+      <p class="title fs-36 fg-default"
+	 style="font-family: 'Old English Five', sans-serif">RPG</p>
+      <form
+	  hx-post="/validate"
+	  hx-target="body"
+	  hx-trigger="load"
+	>
+	<input name="id" type="password" value="astral"/>
+      </form>
+      <label id="error">...</label>
+    </div>
+  </body>
+</html>

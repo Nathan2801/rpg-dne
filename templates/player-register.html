@@ -1,0 +1,271 @@
+<main id="prp">
+  <h1>Ficha de registro</h1>
+  <p>Para criar seu personagem tenha em mente que o universe se
+  passa nos dias atuais, e não há elementos místicos.</p>
+  <br>
+  <form
+    hx-post="/player-register"
+    hx-target="#message"
+    hx-on:htmx:before-swap="event.detail.shouldSwap = true;"
+    >
+    <input type="hidden" name="key" value="{{key}}">
+    <div>
+      <label>Nome completo</label>
+      <input name="name" autocomplete="off" value="{{name}}"></div>
+    </div>
+    <div>
+      <label>Sexo</label>
+      <input name="sex" list="sex-options" autocomplete="off" value="{{sex}}">
+      <datalist id="sex-options">
+	<option value="Masculino">
+	<option value="Feminino">
+	<option value="Outro">
+      </datalist>
+    </div>
+    <div>
+      <label>Nascimento</label>
+      <input type="date" name="birth" autocomplete="off" min="1950-01-01" max="2005-12-31" value="{{birth}}"></div>
+    </div>
+    <div>
+      <label>Ocupação</label>
+      <p class="info">Pode ser qualquer ocupação sugerida ou uma que
+      lhe venha em mente, a ocupação dará vantagens ao jogadores
+      seja dando-os attributos ou alguma</p>
+      <input list="profissions" name="job" autocomplete="off" value="{{job}}">
+      <datalist id="profissions">
+	<option value="Hacker">
+	<option value="Ladrão">
+	<option value="Médico">
+	<option value="Militar">
+	<option value="Lutador">
+	<option value="Político">
+	<option value="Polícial">
+	<option value="Investigador">
+      </datalist>
+    </div>
+    <div>
+      <label>Descrição visual</label>
+      <textarea name="visual" rows="10">{{visual}}</textarea>
+    </div>
+    <div>
+      <label>História</label>
+      <textarea name="history" rows="10">{{history}}</textarea>
+    </div>
+    <br>
+    <div>
+      <h3>Atributos (<span id="attributes-points">{{attributes_points_n}}</span> pontos)</h3>
+      {% for attr in attributes %}
+      <label id="{{attr}}-value">{{attr}}: <span>{{attributes[attr]}}</span></label>
+      <input id="{{attr}}-input" type="range" name="{{attr}}" min="0" max="2" value="{{attributes[attr]}}">
+      {% endfor %}
+    </div>
+    <br>
+    <div>
+      <h3>Conhecimentos (<span id="knowledges-points">{{knowledges_points_n}}</span> pontos)</h3>
+      {% for knowledge in knowledges %}
+      <label id="{{knowledge}}-value">{{knowledge}}: <span>{{knowledges[knowledge]}}</span></label>
+      <input id="{{knowledge}}-input" type="range" name="{{knowledge}}" min="0" max="3" value="{{knowledges[knowledge]}}">
+      {% endfor %}
+    </div>
+    <br>
+    <p>Mensagem: <span id="message"></span></p>
+    <input type="submit" value="Criar">
+  </form>
+</main>
+<script>
+  const attrsPoints = {{attributes_points_n}};
+  const attrsPointsSpan = document.querySelector("#attributes-points");
+
+  const knowledgePoints = {{knowledges_points_n}};
+  const knowledgePointsSpan = document.querySelector("#knowledges-points")
+
+  function link(input, text, extend) {
+    input.oninput = (e) => {
+      text.innerHTML = e.target.value;
+      if (extend !== undefined) {
+	extend(e);
+      }
+    };
+  }
+
+  const attrs = [
+    {% for attr in attributes %}
+    [document.querySelector("#{{attr}}-value"), document.querySelector("#{{attr}}-input")],
+    {% endfor %}
+  ];
+
+  const knowledges = [
+    {% for knowledge in knowledges %}
+    [document.querySelector("#{{knowledge}}-value"), document.querySelector("#{{knowledge}}-input")],
+    {% endfor %}
+  ];
+
+  function updatePoints(span, points, list) {
+    return (e) => {
+      let value = points;
+      for (let t of list) {
+	let input = t[1];
+	value -= Number(input.value);
+      }
+      if (value < 0) {
+	span.innerHTML = "muitos";
+	span.style.color = "#ff8888";
+      } else {
+	span.innerHTML = value;
+	span.style.color = "var(--fg)";
+      }
+    }
+  }
+
+  for (let t of attrs) {
+    link(t[1], t[0].childNodes[1], updatePoints(attrsPointsSpan, attrsPoints, attrs));
+  }
+
+  updatePoints(attrsPointsSpan, attrsPoints, attrs)(null);
+
+  for (let t of knowledges) {
+    link(t[1], t[0].childNodes[1], updatePoints(knowledgePointsSpan, knowledgePoints, knowledges));
+  }
+
+  updatePoints(knowledgePointsSpan, knowledgePoints, knowledges)(null);
+</script>
+<style>
+body {
+  display: flex;
+  justify-content: center;
+  background: var(--bg);
+}
+
+#prp {
+  color: var(--fg);
+  padding: 1rem;
+  background: var(--bg);
+  font-family: sans-serif;
+
+  width: 100%;
+  max-width: 480px;
+}
+
+.info {
+  color: var(--fg-1);
+}
+
+/** General
+ */
+#prp textarea {
+  resize: none;
+}
+
+/** Label
+  */
+#prp label {
+  margin: 1rem 0 0.5rem 0;
+  display: block;
+}
+
+/** Paragraph
+  */
+#prp p {
+  margin: 0.5rem 0;
+}
+
+/** Inputs
+ */
+#prp input {
+  color: var(--fg);
+  width: 100%;
+  height: 2rem;
+  border: 2px solid var(--fg);
+  background: transparent;
+  border-radius: 1em;
+  padding: 0 0.5rem;
+}
+
+#prp input:focus {
+  outline: none;
+}
+
+#prp input[type="date"]::-webkit-calendar-picker-indicator {
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--fg);
+  background: none;
+  border-radius: 1rem;
+}
+
+#prp input[type="submit"] {
+  color: var(--bg);
+  font-weight: bold;
+  background: var(--fg);
+}
+
+#prp input[type="submit"]:hover {
+  cursor: pointer;
+}
+
+/** Selects
+ */
+#prp select {
+  appearance: none;
+  color: var(--fg);
+  width: 100%;
+  border: 2px solid var(--fg);
+  border-radius: 0.50rem;
+  background: transparent;
+  padding: 0.25rem;
+}
+
+#prp select:focus {
+  outline: none;
+}
+
+#prp option {
+  background: transparent;
+}
+
+/** Textarea
+ */
+#prp textarea {
+  color: var(--fg);
+  width: 100%;
+  border: 2px solid var(--fg);
+  border-radius: 0.50rem;
+  background: transparent;
+  padding: 0.5rem 0.5rem;
+}
+
+#prp textarea:focus {
+  outline: none;
+}
+
+/** Range
+  */
+#prp input[type="range"] {
+  appearance: none;
+  -webkit-appearance: none;
+  background: #ffffff22;
+  border: none;
+  height: 0.25rem;
+  margin: 1rem 0;
+}
+
+#prp input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  background: var(--fg);
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 0.3525rem;
+}
+
+/** Scrollbar
+  */
+#prp *::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+#prp *::-webkit-scrollbar-thumb {
+  background: var(--fg);
+  border-radius: 0.25rem;
+}
+</style>

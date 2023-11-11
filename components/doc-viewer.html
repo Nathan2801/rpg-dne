@@ -1,0 +1,83 @@
+<div class="doc-viewer f fc">
+  <div
+    id="document"
+    hx-trigger="load"
+    hx-get="/document">
+  </div>
+  <div id="doc-chooser">
+    <p id="doc-name">[name]</p>
+    <button
+      id="prev-doc"
+      class="hidden"
+      hx-get="/document/previous"
+      hx-target="#document">prev</button>
+    <button
+      id="next-doc"
+      class="hidden"
+      hx-get="/document/next"
+      hx-target="#document">next</button>
+  </div>
+</div>
+<style>
+#document {
+  padding       : 0.3rem;
+  border-bottom : 1px solid #fb568a;
+}
+
+#document ol {
+  list-style-type : none;
+}
+
+.doc-viewer > div:nth-child(1) {
+  height     : 100%;
+  overflow-y : scroll;
+}
+
+#doc-chooser {
+  padding : 0.3rem;
+}
+
+.doc-viewer .title, h1 {
+  text-align : center;
+}
+
+.doc-viewer h2 {
+  margin : 2.0rem 0 2.5rem 0.5rem;
+}
+
+.doc-viewer h3 {
+  margin : 1.4rem 0 0.7rem 0.5rem;
+}
+
+.doc-viewer h4 {
+  margin : 1.5rem 0 2.0rem 0.5rem;
+}
+
+.doc-viewer p {
+  margin : 0.2rem 0 0.5rem 0.5rem;
+}
+
+.doc-viewer table td {
+  border : 1px solid #00000022;
+}
+
+.doc-viewer li {
+  margin-left: 0.5rem;
+}
+</style>
+<script>
+  (function() {
+    const clickEvents = {
+      "j": () => htmx.find("#prev-doc").click(),
+      "k": () => htmx.find("#next-doc").click(),
+    };
+
+    document.body.addEventListener("keypress", (e) => {
+      let key = e.key;
+      if (clickEvents[key]) {
+	let f = clickEvents[key];
+	f();
+      }
+    });
+  })();
+</script>
