@@ -75,6 +75,20 @@ def _path(key):
     return path
 
 
+def _empty_player(key):
+    return ({
+        "key": key,
+        "sex": "",
+        "job": "",
+        "name": "",
+        "birth": "",
+        "visual": "",
+        "history": "",
+        "attributes": {attr: 0 for attr in ATTRIBUTES},
+        "knowledges": {know: 0 for know in KNOWLEDGES}
+        })
+
+
 def _validate(d):
     x = d.get("sex")
     if x == None or x == "": raise ClientError(ERR_MISSING_SEX)
@@ -126,21 +140,10 @@ def get(key):
 
 
 def register(key):
-    with open(_path(key), "w+") as f:
-        d = ({
-            "key": key,
-            "sex": "",
-            "job": "",
-            "name": "",
-            "birth": "",
-            "visual": "",
-            "history": "",
-            "attributes": {attr: 0 for attr in ATTRIBUTES},
-            "knowledges": {know: 0 for know in KNOWLEDGES}
-            })
-
-        f.write(json.dumps(d, indent=2))
-
+    if not exists(key):
+        with open(_path(key), "w+") as f:
+            f.write(json.dumps(_empty_player(key), indent=2))
+    # TODO: check if our file contains the correct format.
     return None
 
 
