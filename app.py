@@ -1,6 +1,8 @@
 import os
 import json
 import time
+import logging
+import logging.handlers
 
 from datetime import datetime
 from flask import (
@@ -13,6 +15,31 @@ from flask import (
 
 import player
 
+app = Flask(__name__)
+
+""" #LOGGING """
+
+SERVER_LOG_LEVEL   = 60
+SERVER_ERROR_LEVEL = 70
+
+MAX_LOG_FILE_SIZE  = 1024*5
+
+handler_file_log = logging.handlers.RotatingFileHandler("server.log", maxBytes=MAX_LOG_FILE_SIZE)
+handler_file_log.setLevel(SERVER_LOG_LEVEL)
+handler_file_log.setFormatter(logging.Formatter("[%(asctime)s] %(module)s: %(message)s", "%d/%m/%Y %H:%M:%S"))
+
+app.logger.addHandler(handler_file_log)
+
+def log(msg, *args, **kwargs):
+    return app.logger.log(SERVER_LOG_LEVEL, msg, *args, **kwargs)
+
+def log_error(msg, *args, **kwargs):
+    return app.logger.log(SERVER_ERROR_LEVEL, "ERROR: " + msg, *args, **kwargs)
+
+""" #PLAYERS """
+
+GAME_MASTER = "iamthecreatorofthisworld"
+
 player.register("cruel")
 player.register("astral")
 player.register("violao")
@@ -20,9 +47,7 @@ player.register("jogador")
 player.register("teclado")
 player.register("mestre")
 
-app = Flask(__name__)
-
-GAME_MASTER = "iamthecreatorofthisworld"
+""" #GAME-CONSTANTS """
 
 ATTRIBUTES_POINTS = 5
 ATTRIBUTES = ([
@@ -46,6 +71,7 @@ KNOWLEDGES = ([
     "Línguas"
     ])
 
+# TODO: code points check at player.py to remove this chunk
 REG_ERR_NONE    = 0
 REG_ERR_NAME    = 1
 REG_ERR_SEX     = 2
@@ -250,7 +276,6 @@ def __player_list__():
 @app.route("/player-register", methods=["POST"])
 def __player_register__():
     key = request.form.get("key", "[unknown]")
-    app.logger.info("player register: attempt: %s", key)
 
     attrs = [(k, int(v)) for k, v in request.form.items() if k in ATTRIBUTES]
     if sum(map(lambda x: x[1], attrs)) > ATTRIBUTES_POINTS:
@@ -265,8 +290,10 @@ def __player_register__():
     except player.ClientError as e:
         return str(e), 200
     except player.ServerError as e:
-        app.logger.error(str(e))
+        log_error(str(e))
         return "Erro desconhecido", 200
+
+    log(f"{key} updated informations")
 
     return "Salvo", 200
 
@@ -276,8 +303,8 @@ def __validate__():
 
     if id_ == GAME_MASTER:
         return render_template("master.html")
-
     try:
+        log(f"{id_} accessed the registration page")
         p = player.get(id_)
         return render_template(
                 "player-register.html", **p,
@@ -286,5 +313,5 @@ def __validate__():
     except player.ClientError as e:
         return str(e), 200, {"HX-Retarget": "#error"}
     except player.ServerError as e:
-        app.logger.error(e)
+        log_error(e)
         return "Erro desconhecido", 200, {"HX-Retarget": "#error"}
