@@ -149,6 +149,8 @@ def get(key):
 
 
 def register(key):
+    if not os.path.exists("players/"):
+        os.mkdir("players")
     if not exists(key):
         with open(_path(key), "w+") as f:
             f.write(json.dumps(_empty_player(key), indent=2))
