@@ -57,6 +57,7 @@ ERR_MISSING_VISUAL = "Caixa (caracteristicas) vazia"
 ERR_MISSING_HISTORY = "Caixa (historia) vazia"
 ERR_MISSING_ATTRIBUTES = "Atributos nao listados"
 ERR_MISSING_KNOWLEDGES = "Conhecimentos nao listados"
+ERR_ABUSE_OF_POINTS = "Abuso de pontos"
 
 ERR_INVALID_KEY = "Chave invalida"
 ERR_INVALID_JSON_FILE = "Format do aquivo do jogador invalido"
@@ -106,18 +107,26 @@ def _validate(d):
     if x == None or x == "": raise ClientError(ERR_MISSING_HISTORY)
 
     i = 0
+    v = 0
     for k in d:
         if k in ATTRIBUTES:
             i += 1
+            v += int(d[k])
     if i != len(ATTRIBUTES):
         raise ServerError(ERR_MISSING_ATTRIBUTES)
+    if v > ATTRIBUTES_POINTS:
+        raise ClientError(ERR_ABUSE_OF_POINTS)
 
     i = 0
+    v = 0
     for k in d:
         if k in KNOWLEDGES:
             i += 1
+            v += int(d[k])
     if i != len(KNOWLEDGES):
         raise ServerError(ERR_MISSING_KNOWLEDGES)
+    if v > KNOWLEDGES_POINTS:
+        raise ClientError(ERR_ABUSE_OF_POINTS)
 
     return None
 

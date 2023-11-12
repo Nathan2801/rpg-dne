@@ -71,15 +71,6 @@ KNOWLEDGES = ([
     "Línguas"
     ])
 
-# TODO: code points check at player.py to remove this chunk
-REG_ERR_NONE    = 0
-REG_ERR_NAME    = 1
-REG_ERR_SEX     = 2
-REG_ERR_BIRTH   = 3
-REG_ERR_VISUAL  = 4
-REG_ERR_HISTORY = 5
-REG_ERR_POINTS  = 6
-
 REGISTRATION_ERRORS = ([
     "Registrado",
     "Caixa nome invalida",
@@ -276,14 +267,6 @@ def __player_list__():
 @app.route("/player-register", methods=["POST"])
 def __player_register__():
     key = request.form.get("key", "[unknown]")
-
-    attrs = [(k, int(v)) for k, v in request.form.items() if k in ATTRIBUTES]
-    if sum(map(lambda x: x[1], attrs)) > ATTRIBUTES_POINTS:
-        return REGISTRATION_ERRORS[REG_ERR_POINTS], 400
-
-    knows = [(k, int(v)) for k, v in request.form.items() if k in KNOWLEDGES]
-    if sum(map(lambda x: x[1], knows)) > KNOWLEDGES_POINTS:
-        return REGISTRATION_ERRORS[REG_ERR_POINTS], 400
 
     try:
         player.edit(**request.form)
