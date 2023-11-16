@@ -24,6 +24,7 @@ ATTRIBUTES = ([
     "Reflexos",
     "Precisão",
     "Presença",
+    "Percepção",
     "Agilidade",
     "Inteligência",
     "Furtividade"
@@ -124,13 +125,25 @@ def get(key):
     if not exists(key):
         raise ClientError(ERR_INVALID_KEY)
 
-    d = {}
+    parsed = None
+    result = _empty_player(key)
+
     with open(_path(key), "r") as f:
         s = f.read()
-        try: d = json.loads(s)
+        try: parsed = json.loads(s)
         except: raise ServerError(ERR_INVALID_JSON_FILE)
 
-    return d
+    for k in parsed:
+        if k == "attributes":
+            for k_, v_ in parsed[k].items():
+                result[k][k_] = v_
+        elif k == "knowledges":
+            for k_, v_ in parsed[k].items():
+                result[k][k_] = v_
+        else:
+            result[k] = parsed[k]
+
+    return result
 
 
 def register(key):
