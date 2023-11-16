@@ -91,21 +91,6 @@ def _empty_player(key):
 
 
 def _validate(d):
-    x = d.get("sex")
-    if x == None or x == "": raise ClientError(ERR_MISSING_SEX)
-    x = d.get("job")
-    if x == None or x == "": raise ClientError(ERR_MISSING_JOB)
-    x = d.get("key")
-    if x == None or x == "": raise ClientError(ERR_MISSING_KEY)
-    x = d.get("name")
-    if x == None or x == "": raise ClientError(ERR_MISSING_NAME)
-    x = d.get("birth")
-    if x == None or x == "": raise ClientError(ERR_MISSING_BIRTH)
-    x = d.get("visual")
-    if x == None or x == "": raise ClientError(ERR_MISSING_VISUAL)
-    x = d.get("history")
-    if x == None or x == "": raise ClientError(ERR_MISSING_HISTORY)
-
     i = 0
     v = 0
     for k in d:
