@@ -67,7 +67,7 @@ ERR_USER_NOT_REGISTERED = "Usuario nao registrado"
 """ #API """
 
 __DIRECTORY__   = "players/"
-__FILE_FORMAT__ = "{}.html"
+__FILE_FORMAT__ = "{}.json"
 
 
 def _path(key):
@@ -170,15 +170,26 @@ def edit(**kwargs):
     if not exists(key):
         raise ClientError(ERR_USER_NOT_REGISTERED)
 
-    d = {"attributes": {}, "knowledges": {}}
+    d = {}
+    attributes = {}
+    knowledges = {}
+
     for k in kwargs:
         if k in ATTRIBUTES:
-            d["attributes"][k] = kwargs[k]
+            attributes[k] = kwargs[k]
         elif k in KNOWLEDGES:
-            d["knowledges"][k] = kwargs[k]
+            knowledges[k] = kwargs[k]
         else:
             d[k] = kwargs[k]
 
+    d = ({
+        **d,
+        "attributes": attributes,
+        "knowledges": knowledges
+        })
+
     with open(_path(key), "w") as f:
-        f.write(json.dumps(d))
+        s = json.dumps(d, ensure_ascii=False, indent=2)
+        f.write(s)
+
     return None
