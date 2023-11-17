@@ -151,7 +151,7 @@ def register(key):
         os.mkdir("players")
     if not exists(key):
         with open(_path(key), "w+") as f:
-            f.write(json.dumps(_empty_player(key), indent=2))
+            f.write(json.dumps(_empty_player(key), ensure_ascii=False, indent=2))
     # TODO: check if our file contains the correct format.
     return None
 
