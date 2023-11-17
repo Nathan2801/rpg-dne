@@ -46,6 +46,7 @@ player.register("violao")
 player.register("jogador")
 player.register("teclado")
 player.register("mestre")
+player.register("naval")
 
 """ #GAME-CONSTANTS """
 
