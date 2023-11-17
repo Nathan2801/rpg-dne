@@ -18,7 +18,7 @@ edit(key: string, **kwargs) - Edit a existing player.
 
 """ #CONTANTS """
 
-ATTRIBUTES_POINTS = 5
+ATTRIBUTES_POINTS = 6
 ATTRIBUTES = ([
     "Força",
     "Reflexos",
@@ -30,13 +30,14 @@ ATTRIBUTES = ([
     "Furtividade"
     ])
 
-KNOWLEDGES_POINTS = 5
+KNOWLEDGES_POINTS = 6
 KNOWLEDGES = ([
     "Medicina",
     "Tecnologia",
     "Balística",
     "Combate",
     "Investigação",
+    "Comunicação",
     "Furto",
     "Línguas"
     ])
