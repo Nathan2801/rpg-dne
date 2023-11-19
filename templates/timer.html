@@ -1,0 +1,120 @@
+<head>
+  <title>Countdown</title>
+</head>
+<style>
+  @font-face {
+    font-family: DS Digital;
+    src: url("static/clock-font.ttf");
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    color: #F7471B;
+    background: #181818;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  body::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 2;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+  }
+
+  #timer-container {
+    width: 80vw;
+    height: 80vh;
+    background: #181818;
+    border: 5px solid #F7471B;
+    border-radius: 1rem;
+    box-shadow:
+      0 0 5px #F7471B,
+      inset 0 0 5px #F7471B;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #timer {
+    font-size: 150pt;
+    font-family: DS Digital;
+    text-shadow: 0 0 5px #F7471B;
+  }
+</style>
+<body>
+  <div id="timer-container">
+    <div id="timer" class="timer">00:00</div>
+  </div>
+  <script>
+    (function() {
+      let played = false;
+
+      const timer = {
+	elem: document.querySelector("#timer"),
+	audio: document.querySelector("#timer-tick"),
+	seconds: 60 * 60 * 3,
+	interval: undefined,
+      };
+
+      function clamp(num, min, max) {
+	return Math.min(Math.max(num, min), max);
+      }
+
+      function timerDisplay() {
+	let x = timer.seconds;
+
+	let h = Math.floor(x/60/60);
+	x = x - h * 60 * 60;
+
+	let m = Math.floor(x/60);
+	x = x - m * 60;
+
+	let s = x;
+
+	const f = (n) => (n - 1) * -1;
+
+	h = "0".repeat(f(clamp(Math.floor(h/10), 0, 1))) + String(h);
+	m = "0".repeat(f(clamp(Math.floor(m/10), 0, 1))) + String(m);
+	s = "0".repeat(f(clamp(Math.floor(s/10), 0, 1))) + String(s);
+
+	let timeString = `${h}:${m}:${s}`;
+	timer.elem.innerHTML = timeString;
+      }
+
+      function timerPlay() {
+	timer.interval = setInterval(() => {
+	  timer.seconds = timer.seconds - 1;
+	  timerDisplay();
+	  if (timer.seconds < 1) {
+	    clearInterval(timer.interval);
+	  }
+	}, 1000);
+      }
+
+      timer.elem.addEventListener("click", () => {
+	if (!played) {
+	  timerPlay();
+	  played = true;
+	  timer.audio.play();
+	} else {
+	}
+      });
+
+      timerDisplay();
+    })();
+  </script>
+</body>

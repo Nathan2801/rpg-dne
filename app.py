@@ -299,3 +299,7 @@ def __validate__():
     except player.ServerError as e:
         log_error(e)
         return "Erro desconhecido", 200, {"HX-Retarget": "#error"}
+
+@app.route("/timer", methods=["GET"])
+def __timer__():
+    return render_template("timer.html")
