@@ -48,6 +48,12 @@ player.register("teclado")
 player.register("mestre")
 player.register("naval")
 
+""" #SERVER-CONSTANTS """
+
+# If this is set to true show the resgistration
+# page, otherwise show the actual players page.
+REGISTRATION_PHASE = True
+
 """ #GAME-CONSTANTS """
 
 ATTRIBUTES_POINTS = 5
@@ -288,10 +294,18 @@ def __validate__():
     if id_ == GAME_MASTER:
         return render_template("master.html")
     try:
-        log(f"{id_} accessed the registration page")
-        p = player.get(id_)
+        page = ""
+        player_info = player.get(id_)
+
+        if REGISTRATION_PHASE:
+            page = "player-register.html"
+        else:
+            page = "player.html"
+
+        log(f"'{page}' accessed by {id_}")
+
         return render_template(
-                "player-register.html", **p,
+                page, **player_info,
                 knowledges_points_n=player.KNOWLEDGES_POINTS,
                 attributes_points_n=player.ATTRIBUTES_POINTS)
     except player.ClientError as e:
