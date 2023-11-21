@@ -1,0 +1,31 @@
+<div id="player-menu">
+  <button
+      hx-get="sheet/{{key}}"
+      hx-swap="outerHTML"
+      hx-target="#player-menu">ficha</button>
+  <button
+      hx-get="attrs/{{key}}"
+      hx-swap="outerHTML"
+      hx-target="#player-menu">atributos</button>
+  <button
+      onclick="
+      document.body.webkitRequestFullScreen();
+      ">tela cheia</button>
+  <button>+1 de vida</button>
+  <button>-1 de vida</button>
+  <button
+      hx-get="component/dice-roll"
+      hx-swap="outerHTML"
+      hx-target="#player-menu">rolar dados</button>
+</div>
+
+<style>
+#player-menu {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  grid-gap: 1rem;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+</style>

@@ -1,0 +1,33 @@
+<div id="player-attrs">
+  {% for k in attributes %}
+    <section class="attribute">{{k}}: {{attributes[k]}}</section>
+  {% endfor %}
+  {% for k in knowledges %}
+    <section class="knowledge">{{k}}: {{knowledges[k]}}</section>
+  {% endfor %}
+</div>
+
+<style>
+#player-attrs {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  grid-gap: 1rem;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+#player-attrs section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#player-attrs section.attribute {
+  border: 1px solid #ffcccc69;
+}
+
+#player-attrs section.knowledge {
+  border: 1px solid #ccccff69;
+}
+</style>

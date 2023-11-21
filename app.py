@@ -238,13 +238,19 @@ def __messages__(user):
         return "", 200
     return "", 400
 
-@app.route("/player-info/<name>")
-def __player_info__(name):
-    player_info = players.get(name)
-    if player_info == None:
+@app.route("/sheet/<name>")
+def __sheet__(name):
+    sheet = player.get(name)
+    if sheet == None:
         return "", 400
+    return render_template("sheet.html", **sheet)
 
-    return render_template("player-info.html", name=name, **player_info)
+@app.route("/attrs/<name>")
+def __attrs__(name):
+    sheet = player.get(name)
+    if sheet == None:
+        return "", 400
+    return render_template("attrs.html", **sheet)
 
 @app.route("/players")
 def __player__():
