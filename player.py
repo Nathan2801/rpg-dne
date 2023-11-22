@@ -1,23 +1,6 @@
 import os
 import json
 
-"""
-API
-
-exists(key: string) - Check if a player exists.
-
-get(key: string) - Get player attributes.
-
-register(key: string) - Register a new player to be created.
-
-unregister(key: string) - Unregister a player.
-
-edit(key: string, **kwargs) - Edit a existing player.
-
-set_inventory_slot(key: str, slot: int, item: str)
-
-"""
-
 """ #CONTANTS """
 
 ATTRIBUTES_POINTS = 6
@@ -68,19 +51,24 @@ ERR_INVALID_JSON_FILE = "Formato do aquivo do jogador invalido"
 ERR_USER_ALREADY_REGISTERED = "Usuario ja registrado"
 ERR_USER_NOT_REGISTERED = "Usuario nao registrado"
 
-""" #API """
-
+""" API constants
+"""
 __DIRECTORY__   = "players/"
 __FILE_FORMAT__ = "{}.json"
 
-
+""" Hidden functions
+"""
 def _path(key):
+    """Return the path of the file associated with {key}.
+    """
     file = __FILE_FORMAT__.format(key)
     path = __DIRECTORY__ + file
     return path
 
 
-def _empty_player(key):
+def _empty_sheet(key):
+    """Return the structure of a player sheet.
+    """
     return ({
         "key": key,
         "sex": "",
@@ -96,6 +84,8 @@ def _empty_player(key):
 
 
 def _write(key, data):
+    """Write the dictionary {data} to a file associated with {key}.
+    """
     with open(_path(key), "w") as file:
         content = json.dumps(data, ensure_ascii=False, indent=2)
         file.write(content)
@@ -103,6 +93,12 @@ def _write(key, data):
 
 
 def _validate(d):
+    """ Validate 'attributes' and 'knowledges'.
+
+    NOTE: just works for html forms where all
+    information is tied together (there is no
+    more levels of dictionaries).
+    """
     i = 0
     v = 0
     for k in d:
@@ -128,16 +124,67 @@ def _validate(d):
     return None
 
 
-def exists(key):
+def _exists(key):
+    """Check if a player has already been registered.
+    """
     return os.path.exists(_path(key))
 
 
+def _register(key):
+    """Create a json file containing the player structure.
+    """
+    _write(key, _empty_sheet(key))
+    return None
+
+
+def _fill_structure(a, b, strict=True):
+    """Fill a dictionary structure with another dictionary.
+
+    This tries to fill dictionary {a} with the values of
+    dictionary {b}.
+
+    The {strict} boolean argument defines what we do when
+    we find a key that exists on {b} but not on {a}. If the
+    value is True it will just ignore, otherwise it will
+    create the key on the dictionary {a}.
+
+    Example:
+    >>> a = {"name": "", "age": 0}
+    >>> b = {"age": 18}
+    >>> print(_fill_structure(a, b)) # {"name": "", "age": 18}
+    """
+    for key in b.keys():
+        if key in a:
+            value = b[key]
+            if type(a[key]) == type({}) and type(b[key]) == type({}):
+                value = _fill_structure(a[key], b[key], strict=strict)
+            a[key] = value
+        elif not strict:
+            a[key] = b[key]
+    return a
+
+
+def _guarantee_structure(key):
+    """Rewrite the json file to guarantee it contains the
+    correct structure.
+    """
+    player = get(key)
+    base = _empty_sheet(key)
+
+    _write(key, _fill_structure(base, player))
+    return None
+
+
+""" API functions
+"""
 def get(key):
-    if not exists(key):
+    """Get a player information.
+    """
+    if not _exists(key):
         raise ClientError(ERR_INVALID_KEY)
 
     parsed = None
-    result = _empty_player(key)
+    result = _empty_sheet(key)
 
     with open(_path(key), "r") as f:
         s = f.read()
@@ -158,61 +205,69 @@ def get(key):
 
 
 def register(key):
+    """Register a new player with certain {key}.
+    """
     if not os.path.exists("players/"):
         os.mkdir("players")
-    if not exists(key):
-        with open(_path(key), "w+") as f:
-            f.write(json.dumps(_empty_player(key), ensure_ascii=False, indent=2))
-    # TODO: check if our file contains the correct format.
+
+    if _exists(key):
+        _guarantee_structure(key)
+    else:
+        _register(key)
+
     return None
 
 
 def unregister(key):
+    """Delete the player associate with {key}.
+    """
     os.remove(_path(key))
     return None
 
 
-def edit(**kwargs):
-    _validate(kwargs)
+def edit(key, is_form=False, strict_fill=True):
+    """Edit player information.
 
-    key = kwargs["key"]
-    if not exists(key):
-        raise ClientError(ERR_USER_NOT_REGISTERED)
+    Edit accept two variables the player {key} and a
+    boolean value that inform if you are passing a
+    single level dictionary (is_form=True) or a
+    structure dictionary (is_form=False).
 
-    d = _empty_player(key)
-    attributes = {}
-    knowledges = {}
+    The formats discussed before are:
 
-    for k in kwargs:
-        if k in ATTRIBUTES:
-            attributes[k] = kwargs[k]
-        elif k in KNOWLEDGES:
-            knowledges[k] = kwargs[k]
-        else:
-            d[k] = kwargs[k]
+    * single level dictionary - where all information is
+    contained in a single level of dictionary, there are
+    no keys that contains dictionary, only keys and values.
 
-    d = ({
-        **d,
-        "attributes": attributes,
-        "knowledges": knowledges
-        })
+    * structured dictionary - where the format of the
+    dictionary follow the same structure as the normal
+    player structure.
 
-    with open(_path(key), "w") as f:
-        s = json.dumps(d, ensure_ascii=False, indent=2)
-        f.write(s)
+    Usage:
+    >>> edit = player.edit(key, is_form=True)
+    >>> edit(content)
+    """
+    def inner(content):
+        sheet = get(key)
 
-    return None
+        if is_form:
+            for k in content.keys():
+                if k in ATTRIBUTES:
+                    sheet["attributes"][k] = content[k]
+                elif k in KNOWLEDGES:
+                    sheet["knowledges"][k] = content[k]
+
+        _write(key, _fill_structure(sheet, content, strict=strict_fill))
+
+        return None
+    return inner
 
 
 def set_inventory_slot(key, slot, item):
-    sheet = get(key)
-
-    inventory = sheet.get("inventory", {})
-    inventory.update({slot: item})
-
-    sheet.update({"inventory": inventory})
-
-    _write(key, sheet)
+    """Change the player inventory
+    """
+    edit_ = edit(key, is_form=False, strict_fill=False)
+    edit_({"inventory": {slot: item}})
 
     return None
 

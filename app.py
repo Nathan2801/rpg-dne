@@ -291,10 +291,11 @@ def __player_list__():
 
 @app.route("/player-register", methods=["POST"])
 def __player_register__():
-    key = request.form.get("key", "[unknown]")
+    key = request.form.get("key", "")
 
     try:
-        player.edit(**request.form)
+        edit = player.edit(key, is_form=True)
+        edit(request.form)
     except player.ClientError as e:
         return str(e), 200
     except player.ServerError as e:
