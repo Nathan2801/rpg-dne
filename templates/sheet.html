@@ -1,13 +1,13 @@
 <div id="sheet">
-  <h1>{{name}}</h1>
+  <h1>{{name or "Desconhecido"}}</h1>
   <br>
-  <p><b>Sexo:</b> {{sex}}</p>
-  <p><b>Nascimento:</b> {{birth}}</p>
-  <p><b>Oficio:</b> {{job}}</p>
+  <p><b>Sexo:</b> {{sex or "Desconhecido"}}</p>
+  <p><b>Nascimento:</b> {{birth or "00-00-0000"}}</p>
+  <p><b>Oficio:</b> {{job or "Desconhecido"}}</p>
   <br>
   <p><b>Registro:</b></p>
   <br>
-  <p>{{history}}</p>
+  <p>{{history or "Desconhecido"}}</p>
 </div>
 <style>
 #sheet {
