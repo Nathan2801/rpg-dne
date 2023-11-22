@@ -234,6 +234,19 @@ def __messages__(user):
         return "", 200
     return "", 400
 
+@app.route("/live/<name>")
+def __live__(name):
+    sheet = player.get(name)
+    return f"""
+    <div class="live"
+        hx-get="/live/{name}"
+        hx-trigger="load delay:5s"
+        hx-swap="outerHTML">
+        <span>PV: {sheet["live"]["pv"]}</span>
+        <span>PE: {sheet["live"]["pe"]}</span>
+    </div>
+    """, 200
+
 @app.route("/sheet/<name>")
 def __sheet__(name):
     sheet = player.get(name)

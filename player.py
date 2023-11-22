@@ -80,6 +80,10 @@ def _empty_sheet(key):
         "attributes": {attr: 0 for attr in ATTRIBUTES},
         "knowledges": {know: 0 for know in KNOWLEDGES},
         "inventory": {},
+        "live": {
+            "pe": 2,
+            "pv": 10
+            }
         })
 
 
