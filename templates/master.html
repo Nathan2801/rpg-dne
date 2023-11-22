@@ -3,14 +3,16 @@
   <div id="master-page" class="f">
     <section class="f fc">
       <div class="component">
-	<div id="char-list" class="list" hx-get="/players" hx-trigger="load">
+	<div
+	    id="char-list"
+	    class="list"
+	    hx-get="/players/list"
+	    hx-trigger="load">
 	</div>
       </div>
       <div class="component h100p">
-	<div id="char-docv" class="component doc-viewer scroll">
-	  <p id="player-name">[name]</p>
-	  <div id="player-attributes">[attributes]</div>
-	  <p id="player-description">[description]</p>
+	<div id="char-docv" class="component doc-viewer">
+	  <!-- characters information here -->
 	</div>
       </div>
     </section>
@@ -78,15 +80,39 @@
 }
 
 #master-page > section:nth-child(1) > div:nth-child(1) {
-  flex: 1;
+  height: calc(100vh/3)
 }
 
 #master-page > section:nth-child(1) > div:nth-child(2) {
-  flex: 3;
+  height: calc(100vh/3*2)
 }
 
 #master-page > section:nth-child(3) > * {
   height: calc(100vh / 3);
+}
+
+#char-list {
+  display: grid;
+  padding: 0.5rem;
+  grid-gap: 0.5rem;
+  overflow-y: scroll;
+}
+
+#char-list span:hover {
+  color: #ccc;
+  cursor: pointer;
+}
+
+#char-list span:active {
+  color: #888;
+}
+
+#char-docv #player-attrs {
+  grid-template-columns: 1fr;
+}
+
+#char-docv #player-attrs section {
+  padding: 1rem 0;
 }
 
 ::-webkit-scrollbar {

@@ -40,13 +40,18 @@ def log_error(msg, *args, **kwargs):
 
 GAME_MASTER = "iamthecreatorofthisworld"
 
-player.register("cruel")
-player.register("astral")
-player.register("violao")
-player.register("jogador")
-player.register("teclado")
-player.register("mestre")
-player.register("naval")
+PLAYERS = ([
+    "cruel",
+    "astral",
+    "violao",
+    "jogador",
+    "teclado",
+    "mestre",
+    "naval"
+    ])
+
+for name in PLAYERS:
+    player.register(name)
 
 """ #GAME-CONSTANTS """
 
@@ -214,9 +219,6 @@ def __document_name__():
 
 @app.route("/messages/<user>", methods=["GET", "POST"])
 def __messages__(user):
-
-    add_message("Hey!", "M")
-
     if user == GAME_MASTER and request.method == "GET":
         content = ""
         while True:
@@ -258,12 +260,25 @@ def __inventory_set__(name):
     player.set_inventory_slot(name, slot, item)
     return "", 200
 
-@app.route("/players")
+@app.route("/players/list")
 def __player__():
     s = ""
-    for name, player in players.items():
-        s += f'<div class="char-entry" hx-get="/player-info/{name}" hx-trigger="click" hx-swap="none">{name}</div>'
-    return Response(s)
+    for name in PLAYERS:
+        s += f"""
+        <p>
+        {name} ::
+        <span
+          hx-get="/sheet/{name}"
+          hx-swap="innerHTML"
+          hx-target="#char-docv">ficha</span>
+        <span> :: </span>
+        <span
+          hx-get="/attrs/{name}"
+          hx-swap="innerHTML"
+          hx-target="#char-docv">atributos</span>
+        </p>
+        """
+    return s, 200
 
 @app.route("/player/<player_id>")
 def __player_page__(player_id):
