@@ -252,6 +252,18 @@ def __attrs__(name):
         return "", 400
     return render_template("attrs.html", **sheet)
 
+@app.route("/inventory/<name>")
+def __inventory__(name):
+    sheet = player.get(name)
+    return render_template("inventory.html", **sheet)
+
+@app.route("/inventory/set/<name>", methods=["POST"])
+def __inventory_set__(name):
+    slot = int(request.form.get("slot", ""))
+    item = str(request.form.get("item", ""))
+    player.set_inventory_slot(name, slot, item)
+    return "", 200
+
 @app.route("/players")
 def __player__():
     s = ""
@@ -317,7 +329,7 @@ def __validate__():
     except player.ClientError as e:
         return str(e), 200, {"HX-Retarget": "#error"}
     except player.ServerError as e:
-        log_error(e)
+        log_error(str(e))
         return "Erro desconhecido", 200, {"HX-Retarget": "#error"}
 
 @app.route("/timer", methods=["GET"])

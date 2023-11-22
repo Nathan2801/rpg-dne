@@ -11,12 +11,14 @@
       onclick="
       document.body.webkitRequestFullScreen();
       ">tela cheia</button>
-  <button>+1 de vida</button>
-  <button>-1 de vida</button>
   <button
       hx-get="component/dice-roll"
       hx-swap="outerHTML"
       hx-target="#player-menu">rolar dados</button>
+  <button
+      hx-get="inventory/{{key}}"
+      hx-swap="outerHTML"
+      hx-target="#player-menu">inventario</button>
 </div>
 
 <style>

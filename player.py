@@ -14,6 +14,8 @@ unregister(key: string) - Unregister a player.
 
 edit(key: string, **kwargs) - Edit a existing player.
 
+set_inventory_slot(key: str, slot: int, item: str)
+
 """
 
 """ #CONTANTS """
@@ -62,7 +64,7 @@ ERR_MISSING_KNOWLEDGES = "Conhecimentos nao listados"
 ERR_ABUSE_OF_POINTS = "Abuso de pontos"
 
 ERR_INVALID_KEY = "Chave invalida"
-ERR_INVALID_JSON_FILE = "Format do aquivo do jogador invalido"
+ERR_INVALID_JSON_FILE = "Formato do aquivo do jogador invalido"
 ERR_USER_ALREADY_REGISTERED = "Usuario ja registrado"
 ERR_USER_NOT_REGISTERED = "Usuario nao registrado"
 
@@ -88,8 +90,16 @@ def _empty_player(key):
         "visual": "",
         "history": "",
         "attributes": {attr: 0 for attr in ATTRIBUTES},
-        "knowledges": {know: 0 for know in KNOWLEDGES}
+        "knowledges": {know: 0 for know in KNOWLEDGES},
+        "inventory": {},
         })
+
+
+def _write(key, data):
+    with open(_path(key), "w") as file:
+        content = json.dumps(data, ensure_ascii=False, indent=2)
+        file.write(content)
+    return None
 
 
 def _validate(d):
@@ -169,7 +179,7 @@ def edit(**kwargs):
     if not exists(key):
         raise ClientError(ERR_USER_NOT_REGISTERED)
 
-    d = {}
+    d = _empty_player(key)
     attributes = {}
     knowledges = {}
 
@@ -192,3 +202,17 @@ def edit(**kwargs):
         f.write(s)
 
     return None
+
+
+def set_inventory_slot(key, slot, item):
+    sheet = get(key)
+
+    inventory = sheet.get("inventory", {})
+    inventory.update({slot: item})
+
+    sheet.update({"inventory": inventory})
+
+    _write(key, sheet)
+
+    return None
+
