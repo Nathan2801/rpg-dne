@@ -275,3 +275,14 @@ def set_inventory_slot(key, slot, item):
 
     return None
 
+
+def add_to_live_attribute(key, attr, value):
+    """Add {value} to a live attribute.
+    """
+    sheet = get(key)
+    new_value = sheet["live"][attr] + value
+
+    edit_ = edit(key, is_form=False)
+    edit_({"live": {attr: new_value}})
+
+    return None

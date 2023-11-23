@@ -98,13 +98,27 @@
   overflow-y: scroll;
 }
 
-#char-list span:hover {
+#char-list span:hover,
+#char-list form > input[type="submit"]:hover
+{
   color: #ccc;
   cursor: pointer;
 }
 
-#char-list span:active {
+#char-list span:active
+#char-list form > input[type="submit"]:hover
+{
   color: #888;
+}
+
+#char-list form {
+  display: inline;
+}
+
+#char-list form > input[type="submit"] {
+  color: white;
+  border: none;
+  padding: 0px;
 }
 
 #char-docv #player-attrs {

@@ -255,6 +255,15 @@ def __live__(name):
     <span><div class="icon">{% include "pe.svg" %}</div>{{pe}}</span>
     """, pv=pv, pe=pe), 200
 
+@app.route("/live/add", methods=["POST"])
+def __live_add__():
+    key = request.form["key"]
+    value = int(request.form["value"])
+    attribute = request.form["attribute"]
+
+    player.add_to_live_attribute(key, attribute, value)
+    return "", 200
+
 @app.route("/sheet/<name>")
 def __sheet__(name):
     sheet = player.get(name)
@@ -286,18 +295,45 @@ def __player__():
     s = ""
     for name in PLAYERS:
         s += f"""
-        <p>
-        {name} ::
-        <span
-          hx-get="/sheet/{name}"
-          hx-swap="innerHTML"
-          hx-target="#char-docv">ficha</span>
-        <span> :: </span>
-        <span
-          hx-get="/attrs/{name}"
-          hx-swap="innerHTML"
-          hx-target="#char-docv">atributos</span>
-        </p>
+        <div>
+          <span
+            hx-get="/sheet/{name}"
+            hx-swap="innerHTML"
+            hx-target="#char-docv">{name}</span>
+          <span> :: </span>
+          <span
+            hx-get="/attrs/{name}"
+            hx-swap="innerHTML"
+            hx-target="#char-docv">atributos</span>
+          <br>
+          (<form hx-post="/live/add" hx-swap="none">
+            <input type="hidden" name="key" value="{name}"/>
+            <input type="hidden" name="attribute" value="pv"/>
+            <input type="hidden" name="value" value="+1"/>
+            <input type="submit" value="+1pv">
+          </form>
+          <span> | </span>
+          <form hx-post="/live/add" hx-swap="none">
+            <input type="hidden" name="key" value="{name}"/>
+            <input type="hidden" name="attribute" value="pv"/>
+            <input type="hidden" name="value" value="-1"/>
+            <input type="submit" value="-1pv">
+          </form>)
+          <br>
+          (<form hx-post="/live/add" hx-swap="none">
+            <input type="hidden" name="key" value="{name}"/>
+            <input type="hidden" name="attribute" value="pe"/>
+            <input type="hidden" name="value" value="+1"/>
+            <input type="submit" value="+1pe">
+          </form>
+          <span> | </span>
+          <form hx-post="/live/add" hx-swap="none">
+            <input type="hidden" name="key" value="{name}"/>
+            <input type="hidden" name="attribute" value="pe"/>
+            <input type="hidden" name="value" value="-1"/>
+            <input type="submit" value="-1pe">
+          </form>)
+        </div>
         """
     return s, 200
 
