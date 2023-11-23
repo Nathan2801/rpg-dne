@@ -234,17 +234,17 @@ def __messages__(user):
         return "", 200
     return "", 400
 
+@app.route("/player/menu", methods=["POST"])
+def __player_menu__():
+    sheet = player.get(request.form["key"])
+    return render_template("player-menu.html", **sheet)
+
 @app.route("/live/<name>")
 def __live__(name):
     sheet = player.get(name)
     return f"""
-    <div class="live"
-        hx-get="/live/{name}"
-        hx-trigger="load delay:5s"
-        hx-swap="outerHTML">
         <span>PV: {sheet["live"]["pv"]}</span>
         <span>PE: {sheet["live"]["pe"]}</span>
-    </div>
     """, 200
 
 @app.route("/sheet/<name>")
