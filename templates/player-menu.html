@@ -38,8 +38,8 @@
       class="live"
       hx-get="/live/{{key}}"
       hx-trigger="load, every 5s">
-    <span>PV: 00</span>
-    <span>PE: 00</span>
+    <span><div class="icon">{% include "pv.svg" %}</div>00</span>
+    <span><div class="icon">{% include "pe.svg" %}</div>00</span>
   </section>
 </div>
 
@@ -64,8 +64,13 @@ section.live > span {
   display: flex;
   align-items: center;
   justify-content: center;
-
   border: 1px solid var(--hl);
+}
+
+section.live > span > .icon {
+  width: 1rem;
+  height: 1rem;
+  margin: 0 1rem 0 0;
 }
 
 button > p, section {

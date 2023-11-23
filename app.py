@@ -1,4 +1,5 @@
 import os
+import math
 import json
 import time
 import logging
@@ -242,10 +243,17 @@ def __player_menu__():
 @app.route("/live/<name>")
 def __live__(name):
     sheet = player.get(name)
-    return f"""
-        <span>PV: {sheet["live"]["pv"]}</span>
-        <span>PE: {sheet["live"]["pe"]}</span>
-    """, 200
+
+    pv = sheet["live"]["pv"]
+    pe = sheet["live"]["pe"]
+
+    pv = ((min(math.floor(pv/10), 1) * -1 + 1) * "0") + str(pv)
+    pe = ((min(math.floor(pe/10), 1) * -1 + 1) * "0") + str(pe)
+
+    return render_template_string("""
+    <span><div class="icon">{% include "pv.svg" %}</div>{{pv}}</span>
+    <span><div class="icon">{% include "pe.svg" %}</div>{{pe}}</span>
+    """, pv=pv, pe=pe), 200
 
 @app.route("/sheet/<name>")
 def __sheet__(name):
