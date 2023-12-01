@@ -16,6 +16,9 @@ from flask import (
 
 import player
 
+import modules.html as html
+import modules.explorer as explorer
+
 app = Flask(__name__)
 
 """ #LOGGING """
@@ -120,6 +123,12 @@ def readfile(filepath):
     content = ""
     with open(filepath, "r") as file:
         content = file.read()
+    return content
+
+def readfile_utf8(filepath):
+    content = ""
+    with open(filepath, "rb") as file:
+        content = file.read().decode("utf-8")
     return content
 
 def serve_file(filepath, modifier=None, modifier_params={}):
@@ -371,6 +380,32 @@ def __player_register__():
     log(f"{key} updated informations")
 
     return "Salvo", 200
+
+def document_entry(file, full_path):
+    e = html.Element("a")
+    e.inner(file)
+    e.set("href", "#")
+    e.set("style", "display: block")
+    e.set("hx-get", "/explorer/documents/" + file)
+    e.set("hx-target", "#document-viewer")
+    return e
+
+@app.route("/explorer/documents/<name>", methods=["GET"])
+def __explorer_documents_get__(name):
+    explorer_ = explorer.Explorer("./documents")
+    found, full_path = explorer_.find(name)
+
+    if not found:
+        return "", 400
+
+    html_string = readfile_utf8(full_path)
+    return html_string, 200
+
+@app.route("/explorer/documents", methods=["GET"])
+def __explorer_douments__():
+    explorer_ = explorer.Explorer("./documents")
+    content = explorer_.fmap(document_entry)
+    return content, 200
 
 @app.post("/validate")
 def __validate__():

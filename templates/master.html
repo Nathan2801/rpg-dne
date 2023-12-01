@@ -17,10 +17,7 @@
       </div>
     </section>
     <section class="component f fc">
-      <div
-	hx-trigger="load"
-	hx-get="/component/doc-viewer"
-	hx-swap="outerHTML"></div>
+      <div id="document-viewer" class="scroll"></div>
     </section>
     <section class="f fc">
       <div class="component">
@@ -29,6 +26,13 @@
       <div class="component mixer">
 	<div hx-get="/component/mixer" hx-trigger="load" hx-swap="outerHTML"></div>
       </div>
+      <div class="component">
+	<div
+	  class="scroll"
+	  hx-get="/explorer/documents"
+	  hx-trigger="load"></div>
+      </div/>
+      <!--
       <div id="event-list" class="component">
 	<div
 	    id="event-list"
@@ -38,6 +42,7 @@
 	    hx-trigger="every 2s">
 	</div>
       </div>
+      -->
     </section>
   </div>
 </div>
@@ -85,6 +90,10 @@
 
 #master-page > section:nth-child(1) > div:nth-child(2) {
   height: calc(100vh/3*2)
+}
+
+#master-page > section:nth-child(3) > div:nth-child(1) {
+  height: calc(100vh / 3);
 }
 
 #master-page > section:nth-child(3) > * {
