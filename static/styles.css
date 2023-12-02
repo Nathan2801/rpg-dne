@@ -121,3 +121,41 @@ input[type="range"]::-webkit-slider-thumb {
 ::-webkit-scrollbar-track {
   background: var(--bg-1);
 }
+
+.document {
+  padding: 1.5rem;
+}
+
+.document h1 {
+  padding: 1rem 0 0 0;
+  font-size: 2rem;
+}
+
+.document h2 {
+  padding: 0.90rem 0 0 0;
+  font-size: calc(2rem * 0.95);
+}
+
+.document h3 {
+  padding: 0.85rem 0 0 0;
+  font-size: calc(2rem * 0.90);
+}
+
+.document h4 {
+  padding: 0.80rem 0 0 0;
+  font-size: calc(2rem * 0.85);
+}
+
+.document ul {
+  padding: 0.80rem 0 0 1.5rem;
+}
+
+.document p {
+  padding: calc(1rem * 0.50) 0;
+}
+
+.document hr {
+  border: none;
+  border-bottom: 1px dashed #888;
+  padding: 0.80rem 0 0 0;
+}
