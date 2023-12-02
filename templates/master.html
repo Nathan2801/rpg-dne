@@ -28,6 +28,7 @@
       </div>
       <div class="component">
 	<div
+	  id="documents"
 	  class="scroll"
 	  hx-get="/explorer/documents"
 	  hx-trigger="load"></div>
@@ -136,6 +137,12 @@
 
 #char-docv #player-attrs section {
   padding: 1rem 0;
+}
+
+#documents a {
+  padding: 0.25rem;
+  text-decoration: none;
+  border-bottom: 1px solid #00000055;
 }
 
 ::-webkit-scrollbar {
