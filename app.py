@@ -364,6 +364,20 @@ def __explorer_douments__():
     content = explorer_.fmap(document_entry)
     return content, 200
 
+@app.route("/src/<file_name>", methods=["GET"])
+def __explorer_audios__(file_name):
+    explorer_ = explorer.Explorer("./static/audios")
+
+    found, full_path = explorer_.find(file_name)
+    if not found:
+        return "", 400
+
+    source = html.Element("source")
+    source.set("src", full_path)
+    source.set("type", "audio/mpeg")
+
+    return str(source), 200
+
 @app.post("/validate")
 def __validate__():
     id_ = request.form["id"]
