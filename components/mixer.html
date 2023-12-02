@@ -78,3 +78,16 @@
   background : #00000022;
 }
 </style>
+<script>
+  (function() {
+    let loaded = [];
+
+    function singleAudioRequest(evt) {
+      const path = evt.detail.requestConfig.path;
+      if (loaded.includes(path)) return evt.preventDefault();
+      loaded.push(path);
+    }
+
+    document.addEventListener("htmx:beforeRequest", singleAudioRequest);
+  })();
+</script>

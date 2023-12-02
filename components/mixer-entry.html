@@ -1,15 +1,17 @@
 <div id="{{uid}}" class="mixer-entry">
   <section>
-    <button id="{{uid}}-play" class="mixer-btn btn-play">P</button>
+    <button
+	id="{{uid}}-play"
+	class="mixer-btn btn-play"
+	hx-get="/src/{{file_name_with_ext}}"
+	hx-target="#{{uid}}-audio">P</button>
     <button id="{{uid}}-rept" class="mixer-btn">R</button>
   </section>
   <section>
     <p>{{ file_name }}</p>
     <input id="{{uid}}-slider" class="mixer-slider" type="range" min="0" max="100", value="0">
   </section>
-  <audio id="{{uid}}-audio">
-    <source src="{{full_path}}" type="audio/mpeg">
-  </audio>
+  <audio id="{{uid}}-audio"></audio>
 </div>
 <script>
   (function() {

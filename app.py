@@ -179,6 +179,7 @@ def __component_list__(name):
 
         output += render_template_string(component,
                                          file_name=file_name,
+                                         file_name_with_ext=file,
                                          full_path=path + "/" + file,
                                          **params)
 
