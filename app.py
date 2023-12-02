@@ -91,10 +91,6 @@ REGISTRATION_ERRORS = ([
     "Abuso de pontos"
     ])
 
-documents_dir = "documents/"
-documents = os.listdir(documents_dir)
-doc_index = 0
-
 __uid__ = 0
 
 def generate_uid():
@@ -187,45 +183,6 @@ def __component_list__(name):
                                          **params)
 
     return output, 200
-
-@app.route("/document")
-def __document__():
-    global doc_index
-    doc_index = 0
-
-    doc_fname = documents[doc_index]
-    doc_content = readfile(documents_dir + doc_fname)
-
-    doc_content += f'<div id="doc-name" hx-swap-oob="true">{doc_fname}</div>'
-    return doc_content
-
-@app.route("/document/previous")
-def __document_previous__():
-    global doc_index
-    doc_index -= 1
-
-    if doc_index < 0:
-        doc_index = len(documents) - 1
-
-    doc_fname = documents[doc_index]
-    doc_content = readfile(documents_dir + doc_fname)
-
-    doc_content += f'<div id="doc-name" hx-swap-oob="true">{doc_fname}</div>'
-    return doc_content
-
-@app.route("/document/next")
-def __document_name__():
-    global doc_index
-    doc_index += 1
-
-    if doc_index >= len(documents):
-        doc_index = 0
-
-    doc_fname = documents[doc_index]
-    doc_content = readfile(documents_dir + doc_fname)
-
-    doc_content += f'<div id="doc-name" hx-swap-oob="true">{doc_fname}</div>'
-    return doc_content
 
 @app.route("/messages/<user>", methods=["GET", "POST"])
 def __messages__(user):
