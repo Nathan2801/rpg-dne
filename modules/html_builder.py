@@ -32,3 +32,6 @@ class Element:
     def inner(self, inner_html):
         self.inner_html = inner_html
         return self
+
+    def add_child(self, element):
+        return self.inner(self.inner_html + str(element))

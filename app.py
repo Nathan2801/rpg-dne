@@ -1,4 +1,5 @@
 import os
+import sys
 import math
 import json
 import time
@@ -16,8 +17,12 @@ from flask import (
 
 import player
 
-import modules.html as html
-import modules.explorer as explorer
+sys.path.append("./modules")
+
+import debug
+import explorer
+
+from html_builder import *
 
 app = Flask(__name__)
 
@@ -318,7 +323,7 @@ def __player_register__():
     return "Salvo", 200
 
 def document_entry(file, full_path):
-    e = html.Element("a")
+    e = Element("a")
     e.inner(file)
     e.set("href", "#")
     e.set("style", "display: block")
@@ -351,7 +356,7 @@ def __explorer_audios__(file_name):
     if not found:
         return "", 400
 
-    source = html.Element("source")
+    source = Element("source")
     source.set("src", full_path)
     source.set("type", "audio/mpeg")
 
