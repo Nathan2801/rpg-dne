@@ -19,9 +19,7 @@ import player
 
 sys.path.append("./modules")
 
-import debug
-import explorer
-
+from explorer import *
 from html_builder import *
 
 app = Flask(__name__)
@@ -303,7 +301,7 @@ def document_entry(file, full_path):
 
 @app.route("/explorer/documents/<name>", methods=["GET"])
 def __explorer_documents_get__(name):
-    explorer_ = explorer.Explorer("./documents")
+    explorer_ = Explorer("./documents")
     found, full_path = explorer_.find(name)
 
     if not found:
@@ -314,13 +312,13 @@ def __explorer_documents_get__(name):
 
 @app.route("/explorer/documents", methods=["GET"])
 def __explorer_douments__():
-    explorer_ = explorer.Explorer("./documents")
+    explorer_ = Explorer("./documents")
     content = explorer_.fmap(document_entry)
     return content, 200
 
 @app.route("/src/<file_name>", methods=["GET"])
 def __explorer_audios__(file_name):
-    explorer_ = explorer.Explorer("./static/audios")
+    explorer_ = Explorer("./static/audios")
 
     found, full_path = explorer_.find(file_name)
     if not found:
