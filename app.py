@@ -15,9 +15,9 @@ from flask import (
         render_template_string,
         )
 
-import player
-
 sys.path.append("./modules")
+
+import player
 
 from explorer import *
 from html_builder import *
