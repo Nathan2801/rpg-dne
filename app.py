@@ -81,19 +81,6 @@ def generate_uid():
     __uid__ += 1
     return "c" + str(__uid__)
 
-__msg__ = []
-
-def add_message(msg, user):
-    global __msg__
-    msg_time = datetime.now().strftime("%H:%M:%S")
-    __msg__.append([msg, msg_time, user])
-
-def pop_message():
-    global __msg__
-    if len(__msg__) > 0:
-        return __msg__.pop()
-    return ["", "", ""]
-
 def build_component_params():
     params = request.form if request.method == "POST" else {}
     return { "uid": generate_uid(), **params }
@@ -167,23 +154,6 @@ def __component_list__(name):
                                          **params)
 
     return output, 200
-
-@app.route("/messages/<user>", methods=["GET", "POST"])
-def __messages__(user):
-    if user == GAME_MASTER and request.method == "GET":
-        content = ""
-        while True:
-            msg, msg_time, user = pop_message()
-            if msg == "":
-                break
-            msg = f"<p>[{msg_time}][{user}]: {msg}</p>"
-            content += msg
-        return content, 200
-    elif request.method == "POST":
-        message = request.form["message"]
-        add_message("<p>" + message + "</p>")
-        return "", 200
-    return "", 400
 
 @app.route("/player/menu", methods=["POST"])
 def __player_menu__():
