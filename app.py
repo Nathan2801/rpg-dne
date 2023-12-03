@@ -59,28 +59,6 @@ for name in PLAYERS:
 
 """ #GAME-CONSTANTS """
 
-ATTRIBUTES_POINTS = 5
-ATTRIBUTES = ([
-    "Força",
-    "Reflexos",
-    "Precição",
-    "Presença",
-    "Agilidade",
-    "Inteligência",
-    "Furtividade"
-    ])
-
-KNOWLEDGES_POINTS = 5
-KNOWLEDGES = ([
-    "Medicina",
-    "Tecnologia",
-    "Balística",
-    "Combate",
-    "Investigação",
-    "Furto",
-    "Línguas"
-    ])
-
 REGISTRATION_ERRORS = ([
     "Registrado",
     "Caixa nome invalida",
