@@ -124,6 +124,10 @@ def serve_file(filepath, modifier=None, modifier_params={}):
 def __index__():
     return render_template("index.html")
 
+@app.route("/dashboard")
+def __dashboard__():
+    return render_template("dashboard.html")
+
 @app.route("/component/<name>", methods=["GET", "POST"])
 def __component__(name):
     params = build_component_params()
