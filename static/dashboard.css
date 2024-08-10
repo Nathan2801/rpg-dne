@@ -7,6 +7,7 @@
 * {
     margin: 0px;
     padding: 0px;
+
     box-sizing: border-box;
 }
 
@@ -25,12 +26,12 @@ body {
     width: 96px;
     height: 100%;
 
-    background: var(--bg1);
-
     display: flex;
 
     align-items: center;
     flex-direction: column;
+
+    background: var(--bg1);
 }
 
 #dashboard #sidebar .icon {
@@ -50,6 +51,7 @@ body {
     border-radius: 6px;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
