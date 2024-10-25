@@ -1,9 +1,6 @@
-# Rope
+# rpg-dne
 
-This project started because I wanted a way of managing my RPG sessions,
-play sounds, visualize RPG documents, roll dices... Everything you would
-expect from a RPG session.
-
-When I first started it, I was drived for a specific implemetation for
-my RPG, so now I am re-working it to be more generalized, so others can
-use this tool as well.
+This project is a tool to assist RPG sessions,
+but was builded for a specific session with my friends,
+if you want something similar for yours sessions
+see: [rope](https://www.github.com/nathan2801/rope).
